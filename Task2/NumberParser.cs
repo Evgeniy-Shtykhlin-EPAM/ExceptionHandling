@@ -10,66 +10,57 @@ namespace Task2
             {
                 throw new ArgumentNullException();
             }
-            if (string.IsNullOrWhiteSpace(stringValue) || (stringValue.Contains("+-") || stringValue.Contains("-+") || stringValue.Contains("0-")))
-            {
-                throw new FormatException();
-            }
             if (stringValue == "-2147483648")
             {
                 return int.MinValue;
             }
 
-            stringValue = stringValue.Replace(" ", "");
-            stringValue = stringValue.Replace("+", "");
+            bool opposite = false;
+
+            IsAllSymbolNumbers(ref stringValue, ref opposite);
 
             int result = 0;
             int multiple = 1;
-
-            if (stringValue[0] == 45)
+            for (var i = stringValue.Length - 1; i >= 0; i--)
             {
-                stringValue = stringValue.Replace("-", "");
-                for (var i = stringValue.Length - 1; i >= 0; i--)
-                {
-                    int number;
-                    number = (int)((stringValue[i] - '0'));
+                int number;
+                number = stringValue[i] - '0';
 
-                    if ((int)stringValue[i] < 48 || (int)stringValue[i] > 57)
-                    {
-                        throw new FormatException();
-                    }
-                    else
-                    {
-                        result = checked(result + (number * multiple));
-                        multiple = multiple * 10;
-                    }
-                }
+                result = checked(result + (number * multiple));
+
+                multiple *= 10;
+            }
+
+            if (opposite)
+            {
                 result = 0 - result;
-            }
-            else
-            {
-                for (var i = stringValue.Length - 1; i >= 0; i--)
-                {
-                    int number;
-                    number = (int)((stringValue[i] - '0'));
-
-                    if ((int)stringValue[i] < 48 || (int)stringValue[i] > 57)
-                    {
-                        throw new FormatException();
-                    }
-                    else
-                    {
-                        result = checked(result + (number * multiple));
-                        multiple = multiple * 10;
-                    }
-                }
-            }
-
-            if (result > int.MaxValue || result < int.MinValue)
-            {
-                throw new OverflowException();             
             }
 
             return result;
+        }
+        public static void IsAllSymbolNumbers(ref string stringValue,ref bool opposite)
+        {
+            if (string.IsNullOrWhiteSpace(stringValue) || (stringValue.Contains("+-") || stringValue.Contains("-+") || stringValue.Contains("0-")))
+            {
+                throw new FormatException();
+            }
+
+            stringValue = stringValue.Replace(" ", "");
+            stringValue = stringValue.Replace("+", "");
+
+            if (stringValue[0] == 45)
+            {
+                opposite = true;
+            }
+
+            stringValue = stringValue.Replace("-", "");
+            for (int i = 0; i < stringValue.Length-1; i++)
+            {
+                if (stringValue[i] < 48 || stringValue[i] > 57)
+                {
+                    throw new FormatException();
+                }
+            }
         }
     }    
 }

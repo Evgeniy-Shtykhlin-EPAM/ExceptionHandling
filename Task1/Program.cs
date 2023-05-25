@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Task1
 {
@@ -10,14 +9,14 @@ namespace Task1
             bool validateStr;
             do
             {
+                validateStr = true;
                 Console.WriteLine("Enter text:");
                 var str = Console.ReadLine();
                 try
                 {
-                    Console.WriteLine("First symbol is: " + str.First());
-                    validateStr=true;
+                    Console.WriteLine("First symbol is: " + str[0]);
                 }
-                catch (InvalidOperationException)
+                catch (IndexOutOfRangeException)
                 {
                     validateStr = false;
                     Console.WriteLine("InvalidOperationException. Empty line");
